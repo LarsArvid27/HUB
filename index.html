@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apps</title>
+<meta name="theme-color" content="#1a0b2e">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1a0b2e;          /* dark purple */
+    --bg-2:#241040;
+    --box:#120722;
+    --line:#3d2366;
+    --text:#f1e9ff;
+    --muted:#a58fcc;
+    --glow:#9d5cff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--text)}
+  body{
+    font-family:"Outfit",system-ui,sans-serif;
+    min-height:100vh;
+    background:
+      radial-gradient(1000px 600px at 15% -10%, #3b1670aa, transparent 60%),
+      radial-gradient(900px 600px at 100% 100%, #2a0f52aa, transparent 60%),
+      var(--bg);
+  }
+  .wrap{max-width:1200px;margin:0 auto;padding:56px 32px 80px}
+
+  .grid{
+    display:grid;grid-template-columns:1fr;
+    column-gap:56px;row-gap:44px;
+  }
+  @media (min-width:780px){.grid{grid-template-columns:repeat(2,1fr)}}
+
+  .app{display:block;text-decoration:none;color:inherit}
+  .name{
+    font-size:clamp(26px,3vw,36px);font-weight:300;letter-spacing:.01em;
+    margin:0 0 14px 4px;transition:color .2s ease;
+  }
+  .box{
+    position:relative;aspect-ratio:12/5;overflow:hidden;
+    background:var(--box);
+    border:3px solid var(--line);border-radius:14px;
+    transition:border-color .25s ease, box-shadow .25s ease, transform .25s ease;
+  }
+  .app:hover .box,.app:focus-visible .box{
+    border-color:var(--glow);
+    box-shadow:0 0 0 1px var(--glow), 0 20px 60px -20px var(--glow);
+    transform:translateY(-3px);
+  }
+  .app:hover .name,.app:focus-visible .name{color:#fff}
+  .app:focus-visible{outline:none}
+  .desc{margin:14px 4px 0;color:var(--muted);font-size:17px;font-weight:300;line-height:1.4}
+
+  /* shown until/unless the live page loads */
+  .fallback{
+    position:absolute;inset:0;display:grid;place-items:center;
+    background:radial-gradient(circle at 50% 50%, #3b1670, transparent 70%);
+    font-size:48px;
+  }
+  .box iframe{
+    position:absolute;top:0;left:0;width:1280px;height:533px;border:0;
+    transform-origin:0 0;pointer-events:none;
+    opacity:0;transition:opacity .5s ease;
+  }
+  .box iframe.ready{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main class="grid">
+    <a class="app" href="https://cortinator-2000.larsarvid.workers.dev/" target="_blank" rel="noopener">
+      <h2 class="name">Cortinator-2000</h2>
+      <div class="box">
+        <div class="fallback">✂️</div>
+        <iframe data-src="https://cortinator-2000.larsarvid.workers.dev/" title="Cortinator-2000 preview" tabindex="-1" sandbox="allow-scripts allow-same-origin"></iframe>
+      </div>
+      <p class="desc">Slice an image into vertical strips to post together on X.</p>
+    </a>
+
+    <a class="app" href="https://smartpaste.larsarvid.workers.dev/" target="_blank" rel="noopener">
+      <h2 class="name">Smart Paste</h2>
+      <div class="box">
+        <div class="fallback">📋</div>
+        <iframe data-src="https://smartpaste.larsarvid.workers.dev/" title="Smart Paste preview" tabindex="-1" sandbox="allow-scripts allow-same-origin"></iframe>
+      </div>
+      <p class="desc">Paste images and videos straight into After Effects and Premiere Pro.</p>
+    </a>
+
+    <a class="app" href="https://alsabus.larsarvid.workers.dev/" target="_blank" rel="noopener">
+      <h2 class="name">No hay conexión</h2>
+      <div class="box">
+        <div class="fallback">🚌</div>
+        <iframe data-src="https://alsabus.larsarvid.workers.dev/" title="No hay conexión preview" tabindex="-1" sandbox="allow-scripts allow-same-origin"></iframe>
+      </div>
+      <p class="desc">The Alsa coach runner game: jump, collect coins, rack up kilometres.</p>
+    </a>
+
+    <a class="app" href="https://radio.larsarvid.workers.dev/" target="_blank" rel="noopener">
+      <h2 class="name">Radio</h2>
+      <div class="box">
+        <div class="fallback">📻</div>
+        <iframe data-src="https://radio.larsarvid.workers.dev/" title="Radio preview" tabindex="-1" sandbox="allow-scripts allow-same-origin"></iframe>
+      </div>
+      <p class="desc">Live web radio where every listener hears the same song at the same time.</p>
+    </a>
+  </main>
+</div>
+
+<script>
+  // Render each app at 1280px wide and scale it down to fit its box.
+  const fit = (box) => {
+    box.querySelector('iframe').style.transform = `scale(${box.clientWidth / 1280})`;
+  };
+  const ro = new ResizeObserver(entries => entries.forEach(e => fit(e.target)));
+  document.querySelectorAll('.box').forEach(box => {
+    const f = box.querySelector('iframe');
+    fit(box); ro.observe(box);
+    f.addEventListener('load', () => f.classList.add('ready'));
+    f.src = f.dataset.src;
+  });
+</script>
+</body>
+</html>
