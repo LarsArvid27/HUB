@@ -39,7 +39,9 @@
   }
   @media (min-width:780px){.grid{grid-template-columns:repeat(2,1fr)}}
 
-  .app{display:block;text-decoration:none;color:inherit}
+  .app{display:block;text-decoration:none;color:inherit;
+    -webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;
+    -webkit-user-select:none;user-select:none}
   .name{
     font-size:clamp(26px,3vw,36px);font-weight:300;letter-spacing:.01em;
     margin:0 0 14px 4px;transition:color .2s ease;
@@ -49,13 +51,23 @@
     background:var(--box);
     border:3px solid var(--line);border-radius:14px;
     transition:border-color .25s ease, box-shadow .25s ease, transform .25s ease;
+    isolation:isolate; /* Safari: keep the scaled iframe clipped to the rounded corners */
   }
-  .app:hover .box,.app:focus-visible .box{
+  /* Hover effects only on devices with a real mouse — on touch screens
+     :hover "sticks" to whatever card your finger lands on while scrolling */
+  @media (hover:hover) and (pointer:fine){
+    .app:hover .box{
+      border-color:var(--glow);
+      box-shadow:0 0 0 1px var(--glow), 0 20px 60px -20px var(--glow);
+      transform:translateY(-3px);
+    }
+    .app:hover .name{color:#fff}
+  }
+  .app:focus-visible .box{
     border-color:var(--glow);
     box-shadow:0 0 0 1px var(--glow), 0 20px 60px -20px var(--glow);
-    transform:translateY(-3px);
   }
-  .app:hover .name,.app:focus-visible .name{color:#fff}
+  .app:focus-visible .name{color:#fff}
   .app:focus-visible{outline:none}
   .desc{margin:14px 4px 0;color:var(--muted);font-size:17px;font-weight:300;line-height:1.4}
 
